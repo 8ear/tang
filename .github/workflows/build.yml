@@ -27,7 +27,7 @@ jobs:
         run: cat /etc/os-release 2>/dev/null || echo /etc/os-release not available
 
       - name: Install build dependencies
-        run: bash .github/workflows/install-dependencies
+        run: sh .github/workflows/install-dependencies
 
       - name: Build tang
         run: |
