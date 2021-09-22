@@ -9,13 +9,6 @@ debian:*|ubuntu:*)
                    systemd gcovr curl socat
     ;;
 
-alpine:*)
-    apk update
-    # removed systemd because Alpine Linux is only used in Docker environment where no systemd is required.
-    # added bash
-    apk add gcc meson pkgconf libjose jose http-parser gcovr curl socat bash
-    ;;
-
 fedora:*)
     echo 'max_parallel_downloads=10' >> /etc/dnf/dnf.conf
     dnf -y clean all
