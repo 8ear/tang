@@ -37,7 +37,7 @@ jobs:
           OS=$(echo ${DISTRO}|cut -f 1 -d :)
           echo ${OS}
           docker build -t tang:${OS}-${GITHUB_SHA} -f docker/Dockerfile \
-            build-args DISTRO=${DISTRO}
+            build-arg DISTRO=${DISTRO}
       - name: Tag and push container to Github registry
         run: |
           echo "Tag and Push...."
