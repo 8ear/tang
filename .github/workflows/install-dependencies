@@ -11,11 +11,9 @@ debian:*|ubuntu:*)
 
 alpine:*)
     apk update
-    apk add meson pkgconf libjose jose http-parser \
-                    # removed systemd because Alpine Linux is only used in Docker environment where no systemd is required.
-                    gcovr curl socat \
-                    # add bash
-                    bash
+    # removed systemd because Alpine Linux is only used in Docker environment where no systemd is required.
+    # added bash
+    apk add meson pkgconf libjose jose http-parser gcovr curl socat bash
     ;;
 
 fedora:*)
