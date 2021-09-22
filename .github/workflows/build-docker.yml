@@ -23,6 +23,7 @@ jobs:
           #- ubuntu:rolling
           #- ubuntu:bionic
           #- ubuntu:focal #20.04 LTS
+         
     env:
       DISTRO: ${{matrix.os}}
     steps:
@@ -33,7 +34,8 @@ jobs:
 
       - name: Build tang
         run: |
-          docker build -t tang:${DISTRO}-${GITHUB_SHA} -f docker/Dockerfile \
+          OS=$($DISTRO|cut -f 1 -d :)
+          docker build -t tang:${OS}-${GITHUB_SHA} -f docker/Dockerfile \
             build-args DISTRO=${DISTRO}
       - name: Tag and push container to Github registry
         run: |
