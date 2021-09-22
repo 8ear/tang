@@ -1,2 +1,7 @@
+docker
 *.md
-COPYING
+.git
+.dockerignore
+.gitignore
+.gtihub
+!.github/workflow/install-dependencies
