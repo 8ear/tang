@@ -25,6 +25,7 @@ jobs:
           #- centos:8
           #- debian:testing
           - debian:latest
+          - debian:stable-slim
           #- ubuntu:devel
           #- ubuntu:rolling
           #- ubuntu:bionic
