@@ -1,6 +1,6 @@
-ARG ${DISTRO}
-FROM ${DISTRO} as build
-ENV DISTRO = ${DISTRO}
+ARG ${FROM}
+FROM ${FROM} as build
+ENV DISTRO = ${FROM}
 WORKDIR /opt/tang
 COPY .github/workflows/install-dependencies /tmp/install-dependencies
 RUN set -eu \
@@ -8,4 +8,4 @@ RUN set -eu \
   ;./tmp/install-dependencies \
   ;
 
-# FROM ${OS} as final
+# FROM ${FROM} as final
