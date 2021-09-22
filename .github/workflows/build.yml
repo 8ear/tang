@@ -18,6 +18,8 @@ jobs:
           - ubuntu:devel
           - ubuntu:rolling
           - ubuntu:bionic
+          - alpine:latest
+          - alpine:edge
     steps:
       - uses: actions/checkout@v2
 
