@@ -1,12 +1,15 @@
 #!/bin/sh -ex
+SKIP_ON_FINAL=${SKIP_ON_FINAL:-true} # default no skip
 
 case "${DISTRO}" in
 debian:*|ubuntu:*)
     export DEBIAN_FRONTEND=noninteractive
-    apt clean
     apt update
-    apt -y install gcc meson pkg-config libjose-dev jose libhttp-parser-dev \
+    apt -y install jose socat libhttp-parser-dev
+    [ SKIP_ON_FINAL ] && apt -y install gcc meson pkg-config libjose-dev jose libhttp-parser-dev \
                    systemd gcovr curl socat
+    apt -y clean
+    rm -r /var/lib/apt/lists/*
     ;;
 
 fedora:*)
