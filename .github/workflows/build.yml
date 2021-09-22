@@ -18,8 +18,7 @@ jobs:
           - ubuntu:devel
           - ubuntu:rolling
           - ubuntu:bionic
-          - alpine:latest
-          - alpine:edge
+          - ubuntu:focal #20.04 LTS
     steps:
       - uses: actions/checkout@v2
 
