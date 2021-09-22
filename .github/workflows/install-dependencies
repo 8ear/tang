@@ -6,7 +6,9 @@ debian:*|ubuntu:*)
     apt clean
     apt update
     apt -y install gcc meson pkg-config libjose-dev jose libhttp-parser-dev \
-                   systemd gcovr curl socat
+                   systemd gcovr curl socat \
+                   # add cmake
+                   cmake
     ;;
 
 fedora:*)
