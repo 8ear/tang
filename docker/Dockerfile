@@ -18,9 +18,10 @@ RUN set -eu \
   ;
 
 FROM ${DISTRO} as final
-ARG ${DISTRO}
+ARG DISTRO
 WORKDIR /opt/tang
 ENV PATH=${PATH}:/opt/tang
 COPY --from=build /opt/tang /opt/tang
 COPY .github/workflows/install-dependencies /tmp/install-dependencies
-RUN SKIP_ON_FINAL=0 /tmp/install-dependencies
+RUN  export SKIP_ADDITIONAL_PACKAGES="yes"; /tmp/install-dependencies
+CMD [ "/opt/tang/libexec/tangd" ]
