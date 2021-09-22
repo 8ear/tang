@@ -8,4 +8,12 @@ RUN set -eu \
   ;/tmp/install-dependencies \
   ;
 
+RUN set -eu \
+  ;mkdir -p build && cd build \
+  ;export ninja=$(command -v ninja) \
+  ;[ -z "${ninja}" ] && export ninja=$(command -v ninja-build) \
+  ;meson .. || cat meson-logs/meson-log.txt >&2 \
+  ;${ninja} \
+  ;
+
 # FROM ${FROM} as final
