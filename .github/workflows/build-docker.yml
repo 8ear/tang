@@ -1,0 +1,46 @@
+---
+name: build
+
+#on: [push, pull_request, workflow_dispatch]
+on: [workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        os:
+          #- fedora:rawhide
+          #- fedora:latest
+          #- centos:7
+          #- centos:8
+          #- debian:testing
+          - debian:latest
+          #- ubuntu:devel
+          #- ubuntu:rolling
+          #- ubuntu:bionic
+          #- ubuntu:focal #20.04 LTS
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Show OS information
+        run: cat /etc/os-release 2>/dev/null || echo /etc/os-release not available
+
+      - name: Install build dependencies
+        run: sh .github/workflows/install-dependencies
+
+      - name: Build tang
+        run: |
+          docker build -t tang:${DISTRO}-${GITHUB_SHA} -f docker/Dockerfile \
+            build-args OS=${DISTRO}
+      - name: Tag and push container to Github registry
+        run: |
+          sleep 1
+           # do nothing else
+
+    container:
+    #  image: ${{matrix.os}}
+      env:
+        DISTRO: ${{matrix.os}}
+
+# vim:set ts=2 sw=2 et:
