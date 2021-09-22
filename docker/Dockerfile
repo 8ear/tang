@@ -1,5 +1,6 @@
 ARG DISTRO
 FROM ${DISTRO} as build
+ENV DISTRO=${DISTRO}
 WORKDIR /opt/tang
 COPY .github/workflows/install-dependencies /tmp/install-dependencies
 RUN set -eu \
