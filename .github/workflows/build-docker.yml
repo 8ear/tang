@@ -9,7 +9,7 @@ on:
   push:
 jobs:
   build:
-    runs-on: latest
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         os:
