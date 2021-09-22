@@ -1,12 +1,12 @@
 #!/bin/sh -ex
-SKIP_ON_FINAL=${SKIP_ON_FINAL:-true} # default no skip
+SKIP_ADDITIONAL_PACKAGES=${SKIP_ADDITIONAL_PACKAGES:-"no"} # default no skip
 
 case "${DISTRO}" in
 debian:*|ubuntu:*)
     export DEBIAN_FRONTEND=noninteractive
     apt update
-    apt -y install jose socat libhttp-parser-dev curl libjose-dev
-    [ SKIP_ON_FINAL ] && apt -y install gcc meson pkg-config libjose-dev jose libhttp-parser-dev \
+    apt -y --no-install-recommends install jose socat libhttp-parser-dev curl 
+    [ "$SKIP_ADDITIONAL_PACKAGES" = "no" ] && apt -y install gcc meson pkg-config libjose-dev jose libhttp-parser-dev \
                    systemd gcovr curl socat
     apt -y clean
     rm -r /var/lib/apt/lists/*
