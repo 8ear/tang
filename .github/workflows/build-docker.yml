@@ -31,9 +31,6 @@ jobs:
       - name: Show OS information
         run: cat /etc/os-release 2>/dev/null || echo /etc/os-release not available
 
-      - name: Install build dependencies
-        run: sh .github/workflows/install-dependencies
-
       - name: Build tang
         run: |
           docker build -t tang:${DISTRO}-${GITHUB_SHA} -f docker/Dockerfile \
