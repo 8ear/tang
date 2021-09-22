@@ -1,3 +1,4 @@
+ARG ${DISTRO}
 FROM ${DISTRO} as build
 ENV DISTRO = ${DISTRO}
 WORKDIR /opt/tang
