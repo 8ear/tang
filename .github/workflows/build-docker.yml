@@ -1,14 +1,20 @@
 ---
 name: build-docker
-
-#on: [push, pull_request, workflow_dispatch]
-on: 
+on:
   schedule:
     - cron:  '0 0 * * *'
   workflow_dispatch:
   push:
+    branches:
+      - 'master'
+    tags:
+      - 'v*'
+  pull_request:
+    branches:
+      - 'master'
+
 jobs:
-  build:
+  docker:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -23,24 +29,47 @@ jobs:
           #- ubuntu:rolling
           #- ubuntu:bionic
           #- ubuntu:focal #20.04 LTS
-         
     env:
       DISTRO: ${{matrix.os}}
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Show OS information
-        run: cat /etc/os-release 2>/dev/null || echo /etc/os-release not available
-
-      - name: Build tang
-        run: |
-          OS=$(echo ${DISTRO}|cut -f 1 -d :)
-          echo ${OS}
-          docker build -t tang:${OS}-${GITHUB_SHA} -f docker/Dockerfile \
-            build-arg DISTRO=${DISTRO}
-      - name: Tag and push container to Github registry
-        run: |
-          echo "Tag and Push...."
-           # do nothing else
-
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      -
+        name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/tang
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}-${env.DISTRO}
+            type=semver,pattern={{major}}.{{minor}}-${env.DISTRO}
+            type=semver,pattern={{major}}-${env.DISTRO}
+            type=schedule,enable=true,priority=1000,prefix=,suffix=,pattern=nightly-${env.DISTRO}
+          labels: |
+            org.opencontainers.image.title=tang
+            org.opencontainers.image.description=Tang is a server for binding data to network presence.
+            org.opencontainers.image.vendor=${{ github.repository_owner }}
+            
+      -
+        name: Login to DockerHub
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: docker/Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            DISTRO=${env.DISTRO} 
+   
 # vim:set ts=2 sw=2 et:
