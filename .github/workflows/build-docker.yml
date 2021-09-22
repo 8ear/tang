@@ -35,6 +35,10 @@ jobs:
       -
         name: Checkout
         uses: actions/checkout@v2
+      - 
+        name: create base image env from docker image
+        run: |
+          BASE=(echo ${DISTRO}|cut -d : -f 1) >> .profile
       -
         name: Docker meta
         id: meta
@@ -44,10 +48,10 @@ jobs:
           tags: |
             type=ref,event=branch
             type=ref,event=pr
-            type=semver,pattern={{version}}-${{env.DISTRO}}
-            type=semver,pattern={{major}}.{{minor}}-${{env.DISTRO}}
-            type=semver,pattern={{major}}-${{env.DISTRO}}
-            type=schedule,enable=true,priority=1000,prefix=,suffix=,pattern=nightly-${{env.DISTRO}}
+            type=semver,pattern={{version}}-${{env.BASE}}
+            type=semver,pattern={{major}}.{{minor}}-${{env.BASE}}
+            type=semver,pattern={{major}}-${{env.BASE}}
+            type=schedule,enable=true,priority=1000,prefix=,suffix=,pattern=nightly-${{env.BASE}}
           labels: |
             org.opencontainers.image.description=Tang is a server for binding data to network presence.
             org.opencontainers.image.vendor=${{ github.repository_owner }}
