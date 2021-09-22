@@ -38,7 +38,7 @@ jobs:
       - 
         name: create base image env from docker image
         run: |
-          BASE=(echo ${DISTRO}|cut -d : -f 1) >> .profile
+          BASE=$(echo ${DISTRO}|cut -d : -f 1) >> .profile
       -
         name: Docker meta
         id: meta
