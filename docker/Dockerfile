@@ -17,11 +17,18 @@ RUN set -eu \
   ;${ninja} install \
   ;
 
+# Final build without build tools
 FROM ${DISTRO} as final
 ARG DISTRO
 WORKDIR /opt/tang
 ENV PATH=${PATH}:/opt/tang
 COPY --from=build /opt/tang /opt/tang
 COPY .github/workflows/install-dependencies /tmp/install-dependencies
-RUN  export SKIP_ADDITIONAL_PACKAGES="yes"; /tmp/install-dependencies
-ENTRYPOINT ["systemctl enable tangd.socket --now"]
+RUN \
+  export SKIP_ADDITIONAL_PACKAGES="yes" \
+  ;/tmp/install-dependencies \
+  ; rm -Rf /tmp/install-dependencies
+# Install s6-overlay
+ADD https://github.com/just-containers/s6-overlay/releases/download/v1.21.8.0/s6-overlay-amd64.tar.gz /tmp/
+RUN tar xzf /tmp/s6-overlay-amd64.tar.gz -C /
+ENTRYPOINT ["/init"]
