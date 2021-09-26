@@ -35,3 +35,6 @@ RUN \
 COPY --chown=tang:tang docker/entrypoint.sh /entrypoint.sh
 USER tang
 ENTRYPOINT ["/entrypoint.sh"]
+EXPOSE 8080
+VOLUME [ "$TANG_CACHE_PATH" ]
+HEALTHCHECK --start-period=5s --interval=30s --timeout=5s --retries=3 CMD ["curl", "http://localhost:8080/adv"]
