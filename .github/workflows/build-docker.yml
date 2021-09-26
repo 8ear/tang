@@ -24,12 +24,12 @@ jobs:
           #- centos:7
           #- centos:8
           #- debian:testing
-          - debian:latest
+          #- debian:latest
           - debian:stable-slim
           #- ubuntu:devel
           #- ubuntu:rolling
           #- ubuntu:bionic
-          #- ubuntu:focal #20.04 LTS
+          - ubuntu:latest #20.04 LTS at the moment
     env:
       DISTRO: ${{matrix.os}}
       BASE: debian
