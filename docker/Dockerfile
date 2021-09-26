@@ -24,14 +24,13 @@ WORKDIR /opt/tang
 ENV PATH=${PATH}:/opt/tang
 ENV TANG_CACHE_PATH="/var/cache/tang"
 ENV UID=999
-ENV GID=999
 COPY --from=build /opt/tang /opt/tang
 COPY .github/workflows/install-dependencies /tmp/install-dependencies
 RUN \
   export SKIP_ADDITIONAL_PACKAGES="yes" \
   ;/tmp/install-dependencies \
   ; rm -Rf /tmp/install-dependencies \
-  ;useradd -g $GID -u $UID -d $TANG_CACHE_PATH -ms /bin/bash tang \
+  ;useradd -u $UID -d $TANG_CACHE_PATH -ms /bin/bash tang \
   ;
 COPY --chown=tang:tang docker/entrypoint.sh /entrypoint.sh
 USER tang
