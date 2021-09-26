@@ -30,4 +30,4 @@ if [[ -f "$TANG_CACHE_PATH/*.jwk" ]]; then
 fi
 
 ## Start Application
-socat -dd TCP-LISTEN:80,reuseaddr,fork exec:"tangd $TANG_CACHE_PATH"
+socat -d TCP-LISTEN:80,reuseaddr,fork exec:"tangd $TANG_CACHE_PATH"
