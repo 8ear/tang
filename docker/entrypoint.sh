@@ -3,7 +3,7 @@ set -x
 
 ## Prepare Variables
 TANG_CACHE_PATH=${TANG_CACHE_PATH:-"/var/cache/tang"}
-CMD=${$1:-""}
+CMD=${1:-""}
 
 # Check if CMD is set
 if [ "$CMD" == "tangd-rotate-keys" ] ; then
