@@ -31,6 +31,6 @@ RUN \
   ; rm -Rf /tmp/install-dependencies \
   ;useradd -g $GID -u $UID -d $TANG_CACHE_PATH -ms /bin/bash tang \
   ;
-COPY --chown=tang --chgrp=tang docker/entrypoint.sh /entrypoint.sh
+COPY --chown=tang:tang docker/entrypoint.sh /entrypoint.sh
 USER tang
 ENTRYPOINT ["/entrypoint.sh"]
