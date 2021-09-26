@@ -23,6 +23,8 @@ ARG DISTRO
 WORKDIR /opt/tang
 ENV PATH=${PATH}:/opt/tang
 ENV TANG_CACHE_PATH="/var/cache/tang"
+ENV UID=999
+ENV GID=999
 COPY --from=build /opt/tang /opt/tang
 COPY .github/workflows/install-dependencies /tmp/install-dependencies
 RUN \
