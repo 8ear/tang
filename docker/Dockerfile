@@ -21,7 +21,7 @@ RUN set -eu \
 FROM ${DISTRO} as final
 ARG DISTRO
 WORKDIR /opt/tang
-ENV PATH=${PATH}:/opt/tang
+ENV PATH=${PATH}:/opt/tang/bin:/opt/tang/libexec
 ENV TANG_CACHE_PATH="/var/cache/tang"
 ENV UID=999
 COPY --from=build /opt/tang /opt/tang
