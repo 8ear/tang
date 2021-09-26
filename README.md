@@ -118,7 +118,7 @@ the socat package will no longer be required.
 #### Docker Container
 
 Tang is also available as a [Docker
-Container](https://gitlab.com/AdrianKoshka/tang-docker-container/).
+Container](https://github.com/latchset/tang/pkgs/container/tang).
 
 Care should be taken to ensure that, when deploying in a container cluster,
 that the Tang keys are not stored on the same physical medium that you wish to
