@@ -1,7 +1,8 @@
 docker
+!docker/entrypoint.sh
 *.md
 .git
 .dockerignore
 .gitignore
-.gtihub
+.github
 !.github/workflow/install-dependencies
