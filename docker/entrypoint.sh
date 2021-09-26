@@ -6,5 +6,8 @@ TANG_CACHE_PATH=${TANG_CACHE_PATH:-"/var/cache/tang"}
 echo "=================================="
 echo "`date`:"
 
+# Check if keys already exists, if not create one
+[ -f $TANG_CACHE_PATH/*.jwk ] || tangd-rotate-keys -d $TANG_CACHE_PATH
+
 ## Start Application
 tangd $TANG_CACHE_PATH
