@@ -7,4 +7,4 @@ echo "=================================="
 echo "`date`:"
 
 ## Start Application
-/usr/libexec/tangd $TANG_CACHE_PATH
+tangd $TANG_CACHE_PATH
