@@ -10,4 +10,4 @@ echo "`date`:"
 [ -f $TANG_CACHE_PATH/*.jwk ] || tangd-rotate-keys -d $TANG_CACHE_PATH
 
 ## Start Application
-socat tcp-l:8080,reuseaddr,fork exec:"tangd $TANG_CACHE_PATH"
+socat tcp-l:80,reuseaddr,fork exec:"tangd $TANG_CACHE_PATH"
