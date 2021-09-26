@@ -1,5 +1,5 @@
-#!/bin/sh
-set -xv
+#!/bin/bash
+set -x
 
 ## Prepare Variables
 TANG_CACHE_PATH=${TANG_CACHE_PATH:-"/var/cache/tang"}
@@ -30,4 +30,4 @@ if [[ -f "$TANG_CACHE_PATH/*.jwk" ]]; then
 fi
 
 ## Start Application
-socat TCP-LISTEN:80,reuseaddr,fork exec:"tangd $TANG_CACHE_PATH"
+socat -dd TCP-LISTEN:80,reuseaddr,fork exec:"tangd $TANG_CACHE_PATH"
