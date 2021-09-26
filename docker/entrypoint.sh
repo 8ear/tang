@@ -2,13 +2,13 @@
 ## Prepare Variables
 TANG_CACHE_PATH=${TANG_CACHE_PATH:-"/var/cache/tang"}
 
-if [ "$1" == "tangd-rotate-keys" ]; then
+if [ "$1" == "tangd-rotate-keys" ] ; then
   "Start rotating keys..."
   exec tangd-rotate-keys -d "$TANG_CACHE_PATH"
   "End rotating keys..."
 fi
 
-if [ "$1" == "bash" ] || [ "$1" == "sh"]; then
+if [ "$1" == "bash" ] || [ "$1" == "sh" ] ; then
   exec bash
 fi
 
