@@ -1,6 +1,0 @@
-#!/usr/bin/with-contenv sh
-TANG_CACHE_PATH=${TANG_CACHE_PATH:-"/var/cache/tang"}
-echo "==================================" > /dev/stdout
-echo `date`: >> /var/log/tangd.log > /dev/stdout
-s6-setuidgid tang
-/usr/libexec/tangd $TANG_CACHE_PATH > /dev/stdout >2& /dev/stderr
