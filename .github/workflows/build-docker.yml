@@ -36,7 +36,7 @@ jobs:
     steps:
       -
         name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3.1.0
       - 
         name: create base image env from docker image
         run: |
