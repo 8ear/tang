@@ -1,17 +1,29 @@
----
-name: build-docker
+   
+#
+# To use this workflow a GITHUB_TOKEN is necessary to create as a secret in the github repository 
+# with thedescribed scope in the documentation: https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#authenticating-to-the-container-registry
+#
+
+name: Build and Release Docker Package
 on:
-  schedule:
-    - cron:  '0 0 * * *'
-  workflow_dispatch:
+  release:
+    types: [published]
   push:
-    branches:
-      - 'master'
     tags:
-      - 'v*'
-  pull_request:
+      - v*.*.*
     branches:
-      - 'master'
+    - main
+    - master
+  schedule:
+    - cron:  '0 0 * * 0'
+    - cron:  '0 0 * * 4'
+
+
+env:
+  GITHUB_REPO: ${{ github.repository }}
+  DOCKER_REPO: PLEASECHANGE
+  NAME: tang
+
 
 jobs:
   docker:
@@ -34,48 +46,57 @@ jobs:
       DISTRO: ${{matrix.os}}
       BASE: debian
     steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v2
-      - 
-        name: create base image env from docker image
-        run: |
-          BASE=$(echo ${DISTRO}|cut -d : -f 1) >> .profile
-      -
-        name: Docker meta
+      - uses: actions/checkout@v3
+      
+      - name: Docker meta
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v4
         with:
-          images: ghcr.io/${{ github.repository_owner }}/tang
-          flavor: |
-            suffix=-${{env.BASE}}
-#latest=auto
-#prefix=
+          # list of Docker images to use as base name for tags
+          # https://github.com/docker/build-push-action/blob/master/docs/advanced/push-multi-registries.md
+          #  $DOCKER_REPO/$NAME
+          images: |
+            name=${{env.DOCKER_REPO}}/${{env.NAME}},enable=false
+            name=ghcr.io/${{env.GITHUB_REPO}}/${{env.NAME}},enable=true
+          # generate Docker tags based on the following events/attributes
           tags: |
+            type=schedule
             type=ref,event=branch
             type=ref,event=pr
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
-            type=schedule,enable=true,priority=1000,prefix=,pattern=nightly
+            type=sha
           labels: |
             org.opencontainers.image.description=Tang is a server for binding data to network presence.
-            org.opencontainers.image.vendor=${{ github.repository_owner }}
-            
-      -
-        name: Login to DockerHub
-        if: github.event_name != 'pull_request'
-        uses: docker/login-action@v1
+            org.opencontainers.image.vendor=${{ github.repository_owner }}          
+      
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      
+      #- name: Login to Docker Hub
+      #  uses: docker/login-action@v2
+      #  with:
+      #    username: ${{ secrets.DOCKERHUB_USERNAME }}
+      #    password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
         with:
-          #username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
           registry: ghcr.io
           username: ${{ github.actor }}
-          #password: ${{ secrets.GITHUB_TOKEN }}
-      -
-        name: Build and push
-        uses: docker/build-push-action@v2
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: create base image env from docker image
+        run: |
+          BASE=$(echo ${DISTRO}|cut -d : -f 1) >> .profile
+      
+      - name: Build and push for push event
+        uses: docker/build-push-action@v3
         with:
+          # https://github.com/docker/build-push-action/blob/master/docs/advanced/tags-labels.md
           context: .
           file: docker/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
@@ -83,14 +104,14 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             DISTRO=${{env.DISTRO}}
-   
-#      -
-#        if: github.event_name != 'pull_request'
-#        name: Update repo description
-#        uses: peter-evans/dockerhub-description@v2
-#        with:
-#          username: ${{ secrets.DOCKERHUB_USERNAME }}
-#          password: ${{ secrets.DOCKERHUB_PASSWORD }}
-#          repository: user/app
-
+            
+      #- name: Update repo description
+      #  # https://github.com/docker/build-push-action/blob/master/docs/advanced/dockerhub-desc.md
+      #  if: ${{ github.event_name == 'release' }}
+      #  uses: peter-evans/dockerhub-description@v2
+      #  with:
+      #    username: ${{ secrets.DOCKERHUB_USERNAME }}
+      #    password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      #    repository: $DOCKER_REPO/$NAME
+ 
 #vim:set ts=2 sw=2 et:
