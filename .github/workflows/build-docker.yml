@@ -94,7 +94,7 @@ jobs:
           BASE=$(echo ${DISTRO}|cut -d : -f 1) >> .profile
       
       - name: Build and push for push event
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           # https://github.com/docker/build-push-action/blob/master/docs/advanced/tags-labels.md
           context: .
